@@ -15,5 +15,11 @@ STARTING_HULL = 100
 
 # --- Galaxy ---
 GALAXY_SIZE = 8
-USE_CUSTOM_PLANETS = False
-PLANETS = []
+USE_CUSTOM_PLANETS = True
+PLANETS = ["freddy", "BOBO", "Nere"]
+PLANETS.append ("Betty")
+PLANETS.append("franny")
+PLANETS.append("jerry")
+print(PLANETS)
+print(len(PLANETS))
+print(PLANETS[2])
