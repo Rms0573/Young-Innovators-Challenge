@@ -18,8 +18,23 @@ GALAXY_SIZE = 8
 USE_CUSTOM_PLANETS = True
 PLANETS = ["freddy", "BOBO", "Nere"]
 PLANETS.append ("Betty")
-PLANETS.append("franny")
-PLANETS.append("jerry")
+PLANETS.append("Franny")
+PLANETS.append("Jerry")
 print(PLANETS)
 print(len(PLANETS))
 print(PLANETS[2])
+
+PLANETS.append({
+    "name": "Betty",
+    "description": "Bioluminescent forest cover the surface",
+    "danger_level": 1,
+    "has_water": True,
+    "encounter": "empty"
+})
+PLANETS.append({
+    "name": "Franny",
+    "description": "A barren world inside an asteroid belt",
+    "danger_level": 3,
+    "has_water": False,
+    "encounter": "asteroid_field"
+})
