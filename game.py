@@ -28,15 +28,32 @@ def main() -> None:
     crew_desc = constants.CREW_DESCRIPTION
     galaxy = constants.GALAXY_SIZE
  
-    show_intro(constants.SHIP_NAME, constants.CREW_DESCRIPTION)
-    galaxy = create_galaxy(constants.GALAXY_SIZE)
+    show_intro(ship_name, crew_desc)
+    galaxy = create_galaxy(galaxy)
     
 # game loop
 
     for i in range (len(galaxy)):
         destination = galaxy[i]
         oxygen -= 8
+        show_destination(destination, i, len(galaxy))
 
+        if should_stop():
+            oxygen, hull, narration = process_encounter(destination, oxygen, hull)
+            show_encounter(narration)
+            if destination["has_water"]:
+                oxygen, hull, water_narration = process_water_planet(oxygen, hull)
+                show_encounter(water_narration)
+        else:
+            show_encounter("  You fly past without stopping")
+
+        print(f" Oxygen levels: {oxygen}, Hull integrity: {hull}")
+        if oxygen <= 0:
+            show_defeat(ship_name, " Oxygen depleted")
+            return
+        elif hull <= 0:
+            show_defeat(ship_name, "  Hull destroyed")
+            return         
 
 if __name__ == "__main__":
     main()
