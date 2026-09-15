@@ -47,7 +47,7 @@ def main() -> None:
         else:
             show_encounter("  You fly past without stopping")
 
-        print(f" Oxygen levels: {oxygen}, Hull integrity: {hull}")
+        print(f"  Oxygen levels: {oxygen}, Hull integrity: {hull}")
         if oxygen <= 0:
             show_defeat(ship_name, " Oxygen depleted")
             return
@@ -57,3 +57,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+f
