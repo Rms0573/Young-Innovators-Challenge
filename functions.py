@@ -1,10 +1,8 @@
 from engine.display import(
     show_intro,
     show_destination,
-    show_encounter,
     show_defeat,
     show_victory
-
 )
 from engine.galaxy import create_galaxy
 from engine.encounters import process_water_planet
@@ -44,45 +42,5 @@ def process_destination(destination, ship):
             show_encounter(narration)
     else:
         show_encounter("  You fly past without stopping")
-    return ship.oxygen, ship.yhull
+    return oxygen, hull
 
-def show_resources(oxygen, hull):
-    print(f"  Oxygen levels: {oxygen}, Hull integrity: {hull}")
-
-def main() -> None:
-
-# TODO: create and instance of ship class
-    ship = Ship(constants.STARTING_OXYGEN, 
-                constants.STARTING_HULL, 
-                constants.SHIP_NAME, 
-                constants.CREW_DESCRIPTION)
-
-    print(ship.name)
-    print(ship.crew)
-    print(ship.oxygen)
-    print(ship.hull)
-    
-    show_intro(ship.name, ship.crew)
-    galaxy = create_galaxy(constants.GALAXY_SIZE)
-    
-# game loop
-    for i in range (len(galaxy)):
-        destination = galaxy[i]
-        # oxygen -= 8
-        # ship.use_oxygen()
-        
-        show_destination(destination, i, len(galaxy))
-        scan_destination(destination) 
-        
-        process_destination(destination, ship)
-        ship.show_resources()
-
-        cause = ship.check_defeat_status()
-
-        if cause:
-            show_defeat(ship.name, cause)
-            print(cause)
-    show_victory(ship.name)         
-
-if __name__ == "__main__":
-    main()
