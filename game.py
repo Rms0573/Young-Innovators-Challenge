@@ -2,7 +2,6 @@ from engine.display import(
     show_intro,
     show_destination,
     show_encounter,
-    show_defeat
 )
 from engine.galaxy import create_galaxy
 from engine.encounters import process_water_planet
@@ -12,14 +11,39 @@ import constants
 #function to define if to stop at planet or not
 def should_stop() -> None:
     answer = input("Do you want to stop here? if yes, type y, else, type n (y/n):")
-
     if answer == "y":
         return True
     elif answer == "n":
         return False
-    else:
-        print("you either chose, y or n")
+  
+def check_defeat_status(oxygen, hull):
+    if oxygen <= 0:
+        return " Oxygen depleted"
+    elif hull <= 0:
+        return " Hull destroyed"
+    return None
 
+def scan_destination(planet):
+    danger_level = planet["danger_level"]
+    if danger_level < 3: # 1 or 2
+        return "SAFE"
+    elif danger_level == 3:
+        return "RISKY"
+    return "DANGEROUS"
+
+def process_destination(destination, oxygen, hull):
+    if should_stop():
+        oxygen, hull, narration = process_encounter(destination, oxygen, hull)
+        show_encounter(narration)
+        if destination["has_water"]:
+            oxygen, hull, water_narration = process_water_planet(oxygen, hull)
+            show_encounter(narration)
+    else:
+        show_encounter("  You fly past without stopping")
+    return oxygen, hull
+
+def show_resources(oxygen, hull):
+    print(f"  Oxygen levels: {oxygen}, Hull integrity: {hull}")
 
 def main() -> None:
     oxygen = constants.STARTING_OXYGEN
@@ -32,29 +56,19 @@ def main() -> None:
     galaxy = create_galaxy(galaxy)
     
 # game loop
-
     for i in range (len(galaxy)):
         destination = galaxy[i]
         oxygen -= 8
+
         show_destination(destination, i, len(galaxy))
+        scan_destination(destination)
+        oxygen, hull = process_destination(destination, oxygen, hull)
+        show_resources(oxygen, hull)
+        cause = check_defeat_status(oxygen, hull)
 
-        if should_stop():
-            oxygen, hull, narration = process_encounter(destination, oxygen, hull)
-            show_encounter(narration)
-            if destination["has_water"]:
-                oxygen, hull, water_narration = process_water_planet(oxygen, hull)
-                show_encounter(water_narration)
-        else:
-            show_encounter("  You fly past without stopping")
-
-        print(f"  Oxygen levels: {oxygen}, Hull integrity: {hull}")
-        if oxygen <= 0:
-            show_defeat(ship_name, " Oxygen depleted")
-            return
-        elif hull <= 0:
-            show_defeat(ship_name, "  Hull destroyed")
-            return         
+        if cause:
+            print(cause)
+             
 
 if __name__ == "__main__":
     main()
-f
