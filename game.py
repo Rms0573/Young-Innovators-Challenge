@@ -4,50 +4,21 @@ from engine.display import(
     show_encounter,
     show_defeat,
     show_victory
-
 )
 from engine.galaxy import create_galaxy
 from engine.encounters import process_water_planet
-from engine.journey import process_encounter
+from engine.journey import process_encounter 
 import constants
 from classes import Ship
+from functions import check_defeat_status, scan_destination, process_destination, show_resources
 
 #function to define if to stop at planet or not
 def should_stop() -> None:
-    answer = input("Do you want to stop here? if yes, type y, else, type n (y/n):")
+    answer = input("  Do you want to stop here? if yes, Type y, else, Type n (y/n):")
     if answer == "y":
         return True
-    elif answer == "n":
-        return False
-  
-def check_defeat_status(oxygen, hull):
-    if oxygen <= 0:
-        return " Oxygen depleted"
-    elif hull <= 0:
-        return " Hull destroyed"
-    return None
-
-def scan_destination(planet):
-    danger_level = planet["danger_level"]
-    if danger_level < 3: # 1 or 2
-        return "SAFE"
-    elif danger_level == 3:
-        return "RISKY"
-    return "DANGEROUS"
-
-def process_destination(destination, ship):
-    if should_stop():
-        ship.oxygen, ship.hull, narration = process_encounter(destination, ship.oxygen, ship.hull)
-        show_encounter(narration)
-        if destination["has_water"]:
-            ship.oxygen, ship.hull, water_narration = process_water_planet(ship.oxygen, ship.hull)
-            show_encounter(narration)
     else:
-        show_encounter("  You fly past without stopping")
-    return ship.oxygen, ship.yhull
-
-def show_resources(oxygen, hull):
-    print(f"  Oxygen levels: {oxygen}, Hull integrity: {hull}")
+        return False
 
 def main() -> None:
 
@@ -57,31 +28,23 @@ def main() -> None:
                 constants.SHIP_NAME, 
                 constants.CREW_DESCRIPTION)
 
-    print(ship.name)
-    print(ship.crew)
-    print(ship.oxygen)
-    print(ship.hull)
-    
     show_intro(ship.name, ship.crew)
     galaxy = create_galaxy(constants.GALAXY_SIZE)
     
 # game loop
     for i in range (len(galaxy)):
         destination = galaxy[i]
-        # oxygen -= 8
-        # ship.use_oxygen()
-        
+        ship.use_oxygen()
         show_destination(destination, i, len(galaxy))
         scan_destination(destination) 
-        
         process_destination(destination, ship)
         ship.show_resources()
-
         cause = ship.check_defeat_status()
 
         if cause:
             show_defeat(ship.name, cause)
-            print(cause)
+            return
+        
     show_victory(ship.name)         
 
 if __name__ == "__main__":

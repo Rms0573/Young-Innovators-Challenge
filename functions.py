@@ -1,8 +1,4 @@
 from engine.display import(
-    show_intro,
-    show_destination,
-    show_defeat,
-    show_victory
 )
 from engine.galaxy import create_galaxy
 from engine.encounters import process_water_planet
@@ -42,5 +38,5 @@ def process_destination(destination, ship):
             show_encounter(narration)
     else:
         show_encounter("  You fly past without stopping")
-    return oxygen, hull
+    return ship.oxygen, ship.hull
 

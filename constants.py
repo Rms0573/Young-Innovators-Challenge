@@ -11,7 +11,8 @@ CREW_DESCRIPTION = "A band of explorers seeking fortune at the edge of the galax
 
 # --- Starting resources ---
 STARTING_OXYGEN = 100
-STARTING_HULL = 100
+STARTING_HULL   = 100
+MORALE          = 100
 
 # --- Galaxy ---
 GALAXY_SIZE = 8

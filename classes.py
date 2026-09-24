@@ -4,11 +4,13 @@ class Ship:
                  oxygen, 
                  hull, 
                  name, 
-                 crew): # constructor
+                 crew, 
+                 morale): # constructor
         self.oxygen = oxygen
-        self.hull = hull
-        self.name = name
-        self.crew = crew
+        self.hull   = hull
+        self.name   = name
+        self.crew   = crew
+        self.morale = morale
 
     # methods a.k.a "behaviours"
     def check_defeat_status(self):
@@ -22,6 +24,9 @@ class Ship:
     def show_resources(self):
         print(f"  Oxygen levels: {self.oxygen}, Hull integrity: {self.hull}")
 
+    def use_oxygen(self):
+        self.oxygen -= 8
+
 # special methods
 def __str__(self):
     return f""" 
@@ -30,21 +35,23 @@ def __str__(self):
     hull = {self.hull}
     name = {self.name}"""
 
-# one "instance of the "ship" class
-ship_one = Ship(10, 
-                100, 
-                "Python Crew", 
-                "Awesome People")
-
 class AsteroidField:
-    def __init__(self, damage):
-        self.damage = damage
+    def __init__(self, danger_level):
+        self.danger_level = danger_level
+        self.base_damage = 10
         pass
 
 class Raider:
-    def __init__(self, damage):
-        self.damage = damage
-        pass
+    def __init__(self, danger_level):
+        self.danger_level = danger_level
+        self.base_damage = 12
+        self.oxygen_cost = 5
+
+    def process(self, ship):
+        ship.oxygen -= self.oxygen_cost
+        ship.morale -= 5
+        return f" Raider attack: -- {self.base_damage} hull, --{self.oxygen_cost}, -5 morale."
+
 
 class Trader:
     def __init__(self, oxygen_refill, hull_repair):
@@ -53,5 +60,7 @@ class Trader:
         pass
 
 class EmptySpace:
-    pass
-    
+
+    def process(self, ship):
+        ship.morale += 5
+        return " Empty space: +5 morale."
